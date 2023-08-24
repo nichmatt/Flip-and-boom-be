@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon app.js",
+    "test":"jest --runInBand",
     "create": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all",
     "all": "npm run create && npm run start"
   },
