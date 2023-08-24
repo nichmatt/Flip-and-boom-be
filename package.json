@@ -7,7 +7,7 @@
     "start": "nodemon app.js",
     "create": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all",
     "all": "npm run create && npm run start"
-},
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -21,7 +21,9 @@
   },
   "devDependencies": {
     "dotenv": "^16.3.1",
+    "jest": "^29.6.3",
     "nodemon": "^3.0.1",
-    "sequelize-cli": "^6.6.1"
+    "sequelize-cli": "^6.6.1",
+    "supertest": "^6.3.3"
   }
 }
