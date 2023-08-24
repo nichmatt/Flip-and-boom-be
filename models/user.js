@@ -1,5 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
+const { hashPassword } = require("../helpers");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -9,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasOne(models.Highscore);
+      User.hasOne(models.HighScore);
       User.hasOne(models.Profile);
       User.hasMany(models.UserLeaderboard);
     }
@@ -56,5 +57,8 @@ module.exports = (sequelize, DataTypes) => {
       modelName: "User",
     }
   );
+  User.beforeCreate((user, option) => {
+    user.password = hashPassword(user.password);
+  });
   return User;
 };

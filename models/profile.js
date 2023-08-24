@@ -39,12 +39,12 @@ module.exports = (sequelize, DataTypes) => {
       selectedSkin: {
         allowNull: false,
         type: DataTypes.STRING,
-        defaultValue: "skin",
+        defaultValue: "basic",
       },
       selectedChar: {
         allowNull: false,
         type: DataTypes.STRING,
-        defaultValue: "char",
+        defaultValue: "basic",
       },
       UserId: {
         allowNull: false,
