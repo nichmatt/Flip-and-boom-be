@@ -1,4 +1,4 @@
-const { User, Profile } = require("../models");
+const { User, Item } = require("../models");
 const { comparePassword, signToken } = require("../helpers");
 
 class ControllerUser {
@@ -6,14 +6,10 @@ class ControllerUser {
     try {
       const { email, password, username } = req.body;
 
-      const dataUser = await User.create({
+      await User.create({
         email,
         password,
-      });
-
-      await Profile.create({
         username,
-        UserId: dataUser.id,
       });
 
       res.status(201).json({
@@ -43,10 +39,9 @@ class ControllerUser {
       if (!passwordValid) {
         throw { name: "Wrong password" };
       } else {
-        const profile = await Profile.findByPk(data.id);
         const access_token = signToken({
           id: data.id,
-          username: profile.username,
+          username: data.username,
           email: data.email,
         });
 
@@ -64,9 +59,9 @@ class ControllerUser {
   static async getProfile(req, res, next) {
     try {
       const { id } = req.user;
-      const dataProfile = await Profile.findByPk(id, {
+      const data = await User.findByPk(id, {
         attributes: {
-          exclude: ["createdAt", "updatedAt", "UserId"],
+          exclude: ["createdAt", "updatedAt"],
         },
       });
 
@@ -74,9 +69,7 @@ class ControllerUser {
         throw { name: "Login First" };
       }
 
-      res.status(200).json({
-        data: dataProfile,
-      });
+      res.status(200).json(data);
     } catch (err) {
       console.log(err);
     }
@@ -84,7 +77,44 @@ class ControllerUser {
 
   static async updateProfile(req, res, next) {
     try {
-      // const {} = req.body;
+      const { char = "basic", skin = "basic" } = req.body;
+      const { id } = req.user;
+
+      const data = await User.findByPk(id);
+
+      data.set({
+        selectedChar: char,
+        selectedSkin: skin,
+      });
+
+      await data.save();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async getItems(req, res, next) {
+    try {
+      const data = await Item.findAll();
+
+      res.status(200).json(data);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async getInventory(req, res, next) {
+    try {
+      const data = await User.findAll({
+        include: [
+          {
+            model: Item,
+            required: true,
+          },
+        ],
+      });
+
+      console.log(data);
     } catch (err) {
       console.log(err);
     }

@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Item.belongsTo(models.ItemCategory);
+      Item.belongsTo(models.Inventory);
     }
   }
   Item.init(
@@ -50,17 +50,9 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      itemCategoryId: {
+      type: {
         allowNull: false,
-        type: DataTypes.INTEGER,
-        validate: {
-          notEmpty: {
-            msg: "Item Category is required",
-          },
-          notNull: {
-            msg: "Item Category is required",
-          },
-        },
+        type: DataTypes.ENUM,
       },
     },
     {

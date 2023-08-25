@@ -21,13 +21,9 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
-      itemCategoryId: {
+      type: {
         allowNull: false,
-        type: Sequelize.INTEGER,
-        references: {
-          model: "ItemCategories",
-          key: "id",
-        },
+        type: Sequelize.ENUM("Char", "Skin"),
       },
       createdAt: {
         allowNull: false,

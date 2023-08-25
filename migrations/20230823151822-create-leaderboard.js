@@ -9,13 +9,17 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
+      username: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
       score: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
       gameMode: {
         allowNull: false,
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM("Easy", "Medium", "Hard", "Impossible"),
       },
       createdAt: {
         allowNull: false,
