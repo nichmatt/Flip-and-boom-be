@@ -1,3 +1,4 @@
-const { ControllerUser } = require("./controllerUser");
+const { ControllerUser } = require("./ControllerUser");
+const { ControllerLeaderboard } = require("./ControllerLeaderboard");
 
-module.exports = { ControllerUser };
+module.exports = { ControllerUser, ControllerLeaderboard };
