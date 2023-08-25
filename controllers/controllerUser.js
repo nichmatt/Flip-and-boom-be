@@ -1,5 +1,5 @@
 const { User, Profile } = require("../models");
-const { comparePassword, signToken } = require("../helpers/");
+const { comparePassword, signToken } = require("../helpers");
 
 class ControllerUser {
   static async register(req, res, next) {
@@ -11,7 +11,7 @@ class ControllerUser {
         password,
       });
 
-      const dataProfile = await Profile.create({
+      await Profile.create({
         username,
         UserId: dataUser.id,
       });
@@ -22,7 +22,7 @@ class ControllerUser {
       });
     } catch (err) {
       console.log(err);
-      next(err)
+      next(err);
     }
   }
 
@@ -43,26 +43,50 @@ class ControllerUser {
       if (!passwordValid) {
         throw { name: "Wrong password" };
       } else {
-        const token = signToken({
+        const profile = await Profile.findByPk(data.id);
+        const access_token = signToken({
           id: data.id,
+          username: profile.username,
           email: data.email,
         });
 
-        const payloadRes = {
-          id: data.id,
-          username: data.username,
-          email: data.email
-        }
-        
         res.status(200).json({
           statusCode: 200,
-          token,
-          user: payloadRes
+          access_token,
         });
       }
     } catch (err) {
       console.log(err);
-      next(err)
+      next(err);
+    }
+  }
+
+  static async getProfile(req, res, next) {
+    try {
+      const { id } = req.user;
+      const dataProfile = await Profile.findByPk(id, {
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "UserId"],
+        },
+      });
+
+      if (!dataProfile) {
+        throw { name: "Login First" };
+      }
+
+      res.status(200).json({
+        data: dataProfile,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  static async updateProfile(req, res, next) {
+    try {
+      // const {} = req.body;
+    } catch (err) {
+      console.log(err);
     }
   }
 }
