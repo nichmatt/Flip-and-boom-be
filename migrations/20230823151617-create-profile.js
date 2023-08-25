@@ -15,18 +15,22 @@ module.exports = {
       },
       exprience: {
         allowNull: false,
+        defaultValue: 0,
         type: Sequelize.INTEGER,
       },
       balance: {
         allowNull: false,
+        defaultValue: 10,
         type: Sequelize.INTEGER,
       },
       selectedSkin: {
         allowNull: false,
+        defaultValue: "basic",
         type: Sequelize.STRING,
       },
       selectedChar: {
         allowNull: false,
+        defaultValue: "basic",
         type: Sequelize.STRING,
       },
       UserId: {

@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Leaderboard.hasMany(models.UserLeadeboard);
+      Leaderboard.hasMany(models.UserLeaderboard);
     }
   }
   Leaderboard.init(
