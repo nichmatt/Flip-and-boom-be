@@ -22,6 +22,7 @@ class ControllerUser {
       });
     } catch (err) {
       console.log(err);
+      next(err)
     }
   }
 
@@ -40,20 +41,28 @@ class ControllerUser {
       const passwordValid = comparePassword(password, data.password);
 
       if (!passwordValid) {
-        throw { name: "Invalid Email/Password" };
+        throw { name: "Wrong password" };
       } else {
         const token = signToken({
           id: data.id,
           email: data.email,
         });
 
+        const payloadRes = {
+          id: data.id,
+          username: data.username,
+          email: data.email
+        }
+        
         res.status(200).json({
           statusCode: 200,
           token,
+          user: payloadRes
         });
       }
     } catch (err) {
       console.log(err);
+      next(err)
     }
   }
 }

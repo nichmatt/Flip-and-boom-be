@@ -39,7 +39,7 @@ describe('login', () => {
             .post('/login')
             .send({ email: dummyUser.email, password: 'babang ganteng' })
         expect(result.status).toEqual(400)
-        expect(result.body).toEqual('wrong password')
+        expect(result.body).toEqual('Wrong password')
     })
 
     test('failed login, not register email', async () => {
@@ -47,6 +47,6 @@ describe('login', () => {
             .post('/login')
             .send({ email: "babang@mail.com", password: 'babang ganteng' })
         expect(result.status).toEqual(400)
-        expect(result.body).toEqual('email not register')
+        expect(result.body).toEqual('Invalid Email/Password')
     })
 })
