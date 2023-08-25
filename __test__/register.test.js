@@ -23,8 +23,7 @@ describe('register', () => {
             .post('/register')
             .send({ username: dummyUser.username, email: dummyUser.email, password: dummyUser.password })
         expect(result.status).toEqual(201)
-        expect(result.body.username).toEqual(dummyUser.username)
-        expect(result.body.email).toEqual(dummyUser.email)
+        expect(result.body.msg).toEqual("User Created")
     })
 
     test('failed register, not uniq email', async () => {
