@@ -5,7 +5,6 @@ class ControllerUser {
   static async register(req, res, next) {
     try {
       const { email, password, username } = req.body;
-
       await User.create({
         email,
         password,
@@ -17,7 +16,7 @@ class ControllerUser {
         msg: "User Created",
       });
     } catch (err) {
-      console.log(err);
+      console.log(err, "123");
       next(err);
     }
   }

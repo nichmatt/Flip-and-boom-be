@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      TransactionHistory.hasMany(models.User);
+      TransactionHistory.belongsTo(models.User);
     }
   }
   TransactionHistory.init(
@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       UserId: DataTypes.INTEGER,
       OrderId: {
         type: DataTypes.INTEGER,
-        autoIncrement: true,
       },
       amount: {
         type: DataTypes.STRING,
