@@ -22,42 +22,34 @@ module.exports = {
         type: Sequelize.STRING,
       },
       exprience: {
-        allowNull: false,
         defaultValue: 0,
         type: Sequelize.INTEGER,
       },
       balance: {
-        allowNull: false,
         defaultValue: 10,
         type: Sequelize.INTEGER,
       },
       selectedSkin: {
-        allowNull: false,
         defaultValue: "basic",
         type: Sequelize.STRING,
       },
       selectedChar: {
-        allowNull: false,
         defaultValue: "basic",
         type: Sequelize.STRING,
       },
       easyScore: {
-        allowNull: false,
         defaultValue: 0,
         type: Sequelize.INTEGER,
       },
       mediumScore: {
-        allowNull: false,
         defaultValue: 0,
         type: Sequelize.INTEGER,
       },
       hardScore: {
-        allowNull: false,
         defaultValue: 0,
         type: Sequelize.INTEGER,
       },
       impossibleScore: {
-        allowNull: false,
         defaultValue: 0,
         type: Sequelize.INTEGER,
       },
