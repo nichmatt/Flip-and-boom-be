@@ -10,9 +10,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      User.hasOne(models.HighScore);
-      User.hasOne(models.Profile);
-      User.hasMany(models.UserLeaderboard);
+      User.belongsTo(models.Inventory);
+      User.belongsTo(models.TransactionHistory);
     }
   }
   User.init(
@@ -50,6 +49,58 @@ module.exports = (sequelize, DataTypes) => {
             msg: "Password length minimal 5 characters",
           },
         },
+      },
+      username: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        validate: {
+          notEmpty: {
+            msg: "Username is required",
+          },
+          notNull: {
+            msg: "Username is required",
+          },
+        },
+      },
+      exprience: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      balance: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      selectedSkin: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        defaultValue: "basic",
+      },
+      selectedChar: {
+        allowNull: false,
+        type: DataTypes.STRING,
+        defaultValue: "basic",
+      },
+      easyScore: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      mediumScore: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      hardScore: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      impossibleScore: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
       },
     },
     {

@@ -2,31 +2,11 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("HighScores", {
+    await queryInterface.createTable("TransactionHistories", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
-      },
-      easy: {
-        allowNull: false,
-        defaultValue: 0,
-        type: Sequelize.INTEGER,
-      },
-      normal: {
-        allowNull: false,
-        defaultValue: 0,
-        type: Sequelize.INTEGER,
-      },
-      hard: {
-        allowNull: false,
-        defaultValue: 0,
-        type: Sequelize.INTEGER,
-      },
-      impossible: {
-        allowNull: false,
-        defaultValue: 0,
         type: Sequelize.INTEGER,
       },
       UserId: {
@@ -36,6 +16,22 @@ module.exports = {
           model: "Users",
           key: "id",
         },
+      },
+      OrderId: {
+        type: Sequelize.INTEGER,
+      },
+      amount: {
+        allowNull: false,
+        type: Sequelize.STRING,
+      },
+      status: {
+        type: Sequelize.ENUM("success", "pending", "failed", "cancel"),
+      },
+      name: {
+        type: Sequelize.STRING,
+      },
+      type: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -48,6 +44,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("HighScores");
+    await queryInterface.dropTable("TransactionHistories");
   },
 };
