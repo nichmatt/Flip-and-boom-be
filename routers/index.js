@@ -5,9 +5,9 @@ const { Authentication } = require("../middlewares");
 router.post("/register", ControllerUser.register);
 router.post("/login", ControllerUser.login);
 router.use(Authentication);
-// router.get("/leaderboard", ControllerLeaderboard.;
-// router.get("/leaderboards", ControllerLeaderboard.updateLB);
 router.get("/profile", ControllerUser.getProfile);
-router.get("/item", ControllerUser.getItems);
+router.put("/update", ControllerUser.updateUser);
+router.patch("/updateScore", ControllerUser.updateScore);
+router.get("/items", ControllerUser.getItems);
 
 module.exports = router;
