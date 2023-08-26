@@ -17,7 +17,6 @@ module.exports = (sequelize, DataTypes) => {
       UserId: DataTypes.INTEGER,
       OrderId: {
         type: DataTypes.INTEGER,
-        autoIncrement: true,
       },
       amount: {
         type: DataTypes.STRING,

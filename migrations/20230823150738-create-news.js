@@ -19,6 +19,7 @@ module.exports = {
       },
       author: {
         type: Sequelize.STRING,
+        defaultValue: "Admin"
       },
       createdAt: {
         allowNull: false,

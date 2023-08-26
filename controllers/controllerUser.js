@@ -1,15 +1,21 @@
-const { User, Item } = require("../models");
+const midtrandClient = require('midtrans-client')
+const { User, Profile } = require("../models");
 const { comparePassword, signToken } = require("../helpers");
 
 class ControllerUser {
+
   static async register(req, res, next) {
     try {
       const { email, password, username } = req.body;
 
-      await User.create({
+      const dataUser = await User.create({
         email,
         password,
+      });
+
+      await Profile.create({
         username,
+        UserId: dataUser.id,
       });
 
       res.status(201).json({
@@ -39,9 +45,10 @@ class ControllerUser {
       if (!passwordValid) {
         throw { name: "Wrong password" };
       } else {
+        const profile = await Profile.findByPk(data.id);
         const access_token = signToken({
           id: data.id,
-          username: data.username,
+          username: profile.username,
           email: data.email,
         });
 
@@ -59,9 +66,9 @@ class ControllerUser {
   static async getProfile(req, res, next) {
     try {
       const { id } = req.user;
-      const data = await User.findByPk(id, {
+      const dataProfile = await Profile.findByPk(id, {
         attributes: {
-          exclude: ["createdAt", "updatedAt"],
+          exclude: ["createdAt", "updatedAt", "UserId"],
         },
       });
 
@@ -69,7 +76,9 @@ class ControllerUser {
         throw { name: "Login First" };
       }
 
-      res.status(200).json(data);
+      res.status(200).json({
+        data: dataProfile,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -77,47 +86,40 @@ class ControllerUser {
 
   static async updateProfile(req, res, next) {
     try {
-      const { char = "basic", skin = "basic" } = req.body;
-      const { id } = req.user;
-
-      const data = await User.findByPk(id);
-
-      data.set({
-        selectedChar: char,
-        selectedSkin: skin,
-      });
-
-      await data.save();
+      // const {} = req.body;
     } catch (err) {
       console.log(err);
     }
   }
 
-  static async getItems(req, res, next) {
+  static async topupBalance(req, res, next){
     try {
-      const data = await Item.findAll();
+      const { amount } = req.body
+      const findUser = await User.findByPk(req.user.id)
 
-      res.status(200).json(data);
-    } catch (err) {
-      console.log(err);
-    }
-  }
+      // initialize midtrans
+      const spap = new midtrandClient.Snap({
+        isProduction: false,
+        serverKey: process.env.MIDTRANS_SERVER_KEY
+      })
 
-  static async getInventory(req, res, next) {
-    try {
-      const { id } = req.user;
-      const data = await User.findByPk(id, {
-        include: [
-          {
-            model: Item,
-            required: true,
-          },
-        ],
-      });
+      let parameter = {
+        "transaction_details": {
+            "order_id": 'Ordre-'+ Math.ceil(Math.random() * 1000),
+            "gross_amount": amount
+        },
+        "credit_card": {
+            "secure": true
+        },
+        "customer_details": {
+            "first_name": findUser.username,
+            "email": findUser.email,
+            "order_date": new Date()
+        }
+    };
 
-      console.log(data);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      next(error)
     }
   }
 }
