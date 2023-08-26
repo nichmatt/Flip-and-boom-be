@@ -9,8 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Inventory.hasMany(models.Item);
-      Inventory.hasMany(models.User);
+
+      Inventory.belongsTo(models.Item);
+      Inventory.belongsTo(models.User);
     }
   }
   Inventory.init(

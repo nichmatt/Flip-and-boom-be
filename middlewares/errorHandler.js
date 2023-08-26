@@ -14,6 +14,7 @@ const errorHandler = (err, req, res, next) => {
             break;
         case 'Wrong password':
         case 'Invalid Email/Password':
+        case "Login First":
             message = err.name;
             statusCode = 400;
             break;
