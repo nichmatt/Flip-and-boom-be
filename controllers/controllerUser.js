@@ -105,7 +105,8 @@ class ControllerUser {
 
   static async getInventory(req, res, next) {
     try {
-      const data = await User.findAll({
+      const { id } = req.user;
+      const data = await User.findByPk(id, {
         include: [
           {
             model: Item,

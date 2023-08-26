@@ -26,18 +26,6 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
-      imageUrl: {
-        allowNull: false,
-        type: DataTypes.STRING,
-        validate: {
-          notEmpty: {
-            msg: "Image Url is required",
-          },
-          notNull: {
-            msg: "Image Url is required",
-          },
-        },
-      },
       price: {
         allowNull: false,
         type: DataTypes.INTEGER,
@@ -53,6 +41,7 @@ module.exports = (sequelize, DataTypes) => {
       type: {
         allowNull: false,
         type: DataTypes.ENUM,
+        values: ["char", "skin"],
       },
     },
     {

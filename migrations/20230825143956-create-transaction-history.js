@@ -18,13 +18,20 @@ module.exports = {
         },
       },
       OrderId: {
-        allowNull: false,
         type: Sequelize.INTEGER,
-        autoIncrement: true,
+      },
+      amount: {
+        allowNull: false,
+        type: Sequelize.STRING,
       },
       status: {
-        allowNull: false,
-        type: Sequelize.ENUM("Paid", "Pending", "Failed", "Cancel"),
+        type: Sequelize.ENUM("success", "pending", "failed", "cancel"),
+      },
+      name: {
+        type: Sequelize.STRING,
+      },
+      type: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,

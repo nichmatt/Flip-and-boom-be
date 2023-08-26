@@ -13,17 +13,13 @@ module.exports = {
         allowNull: false,
         type: Sequelize.STRING,
       },
-      imageUrl: {
-        allowNull: false,
-        type: Sequelize.STRING,
-      },
       price: {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
       type: {
         allowNull: false,
-        type: Sequelize.ENUM("Char", "Skin"),
+        type: Sequelize.ENUM("char", "skin"),
       },
       createdAt: {
         allowNull: false,

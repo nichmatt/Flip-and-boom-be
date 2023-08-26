@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Invetory.hasMany("models.Item");
+      Invetory.hasMany(models.Item);
+      Invetory.hasMany(models.User);
     }
   }
   Invetory.init(

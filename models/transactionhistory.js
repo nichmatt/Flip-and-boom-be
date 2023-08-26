@@ -19,7 +19,19 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         autoIncrement: true,
       },
-      status: DataTypes.ENUM,
+      amount: {
+        type: DataTypes.STRING,
+      },
+      status: {
+        type: DataTypes.ENUM,
+        values: ["success", "pending", "failed", "cancel"],
+      },
+      name: {
+        type: DataTypes.STRING,
+      },
+      type: {
+        type: DataTypes.STRING,
+      },
     },
     {
       sequelize,
