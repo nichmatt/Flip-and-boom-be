@@ -1,14 +1,16 @@
-const { User, Item } = require("../models");
+const midtrandClient = require('midtrans-client')
+const { User, Profile, sequelize, TransactionHistory } = require("../models");
 const { comparePassword, signToken } = require("../helpers");
 
 class ControllerUser {
+
   static async register(req, res, next) {
     try {
       const { email, password, username } = req.body;
-      await User.create({
+
+      const dataUser = await User.create({
         email,
         password,
-        username,
       });
 
       res.status(201).json({
@@ -16,7 +18,7 @@ class ControllerUser {
         msg: "User Created",
       });
     } catch (err) {
-      console.log(err, "123");
+      console.log(err);
       next(err);
     }
   }
@@ -38,9 +40,10 @@ class ControllerUser {
       if (!passwordValid) {
         throw { name: "Wrong password" };
       } else {
+        const profile = await Profile.findByPk(data.id);
         const access_token = signToken({
           id: data.id,
-          username: data.username,
+          username: profile.username,
           email: data.email,
         });
 
@@ -58,9 +61,10 @@ class ControllerUser {
   static async getProfile(req, res, next) {
     try {
       const { id } = req.user;
-      const data = await User.findByPk(id, {
+      const dataProfile = await Profile.findByPk(id, {
         attributes: {
           exclude: ["password", "createdAt", "updatedAt"],
+
         },
       });
 
@@ -68,7 +72,9 @@ class ControllerUser {
         throw { name: "Login First" };
       }
 
-      res.status(200).json(data);
+      res.status(200).json({
+        data: dataProfile,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -93,31 +99,60 @@ class ControllerUser {
     }
   }
 
-  static async getItems(req, res, next) {
+  static async generateTokenMidtrans(req, res, next) {
     try {
-      const data = await Item.findAll();
 
-      res.status(200).json(data);
-    } catch (err) {
-      console.log(err);
+      const { amount } = req.body
+      // const findUser = await User.findByPk(req.user.id)
+
+      // initialize midtrans
+      const snap = new midtrandClient.Snap({
+        isProduction: false,
+        serverKey: process.env.MIDTRANS_SERVER_KEY
+      })
+
+      const date = new Date()
+      let options = {
+        "transaction_details": {
+          "order_id": 'Ordre-' + Math.ceil(Math.random() * 1000) + '-' + date.getTime(),
+          "gross_amount": amount
+        },
+        "credit_card": {
+          "secure": true
+        },
+        "customer_details": {
+          "first_name": 'jajang',
+          "email": 'nugraha@mail.com',
+          "order_date": new Date()
+        }
+      };
+      const responseMidtrans = await snap.createTransaction(options)
+
+      res.status(200).json(responseMidtrans)
+    } catch (error) {
+      next(error)
     }
   }
 
-  static async getInventory(req, res, next) {
+  static async topupBalance(req, res, next) {
+    const trans = sequelize.transaction()
     try {
-      const { id } = req.user;
-      const data = await User.findByPk(id, {
-        include: [
-          {
-            model: Item,
-            required: true,
-          },
-        ],
-      });
+      const { amount, status, orderId } = req.body;
+      const findedUser = await User.findByPk(req.user.id);
 
-      console.log(data);
-    } catch (err) {
-      console.log(err);
+      if (status === 'success') {
+        await User.update({ balance: findedUser.balance + amount, }, { where: { id: req.user.id } }, { transaction: trans })
+        await TransactionHistory.create({ UserId: req.user.id, OrderId: orderId, amount, status, name: findedUser.username, type: 'topup-midtrans' }, { transaction: trans })
+        res.status(201).json({ message: 'topup success' })
+        await trans.commit()
+      } else {
+        await TransactionHistory.create({ UserId: req.user.id, OrderId: orderId, amount, status, name: findedUser.username, type: 'topup-midtrans' }, { transaction: trans })
+        res.status(201).json({ message: 'topup failed', })
+        await trans.commit()
+      }
+    } catch (error) {
+      next(error)
+      await trans.rollback();
     }
   }
 
