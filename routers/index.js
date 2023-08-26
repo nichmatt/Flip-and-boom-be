@@ -4,7 +4,7 @@ const { Authentication } = require("../middlewares");
 
 router.post("/register", ControllerUser.register);
 router.post("/login", ControllerUser.login);
-// router.use(Authentication);
+router.use(Authentication);
 router.get("/leaderboard", );
 router.get("/profile", ControllerUser.getProfile);
 router.put("/update", ControllerUser)
@@ -17,5 +17,6 @@ router.get("/collections", ControllerUser)
 router.post("/collections", ControllerUser)
 router.get("/leaderboard")
 router.get("/leaderboards");
+
 
 module.exports = router;

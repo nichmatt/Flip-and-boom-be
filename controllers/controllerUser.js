@@ -63,11 +63,12 @@ class ControllerUser {
       const { id } = req.user;
       const dataProfile = await Profile.findByPk(id, {
         attributes: {
-          exclude: ["createdAt", "updatedAt", "UserId"],
+          exclude: ["password", "createdAt", "updatedAt"],
+
         },
       });
 
-      if (!dataProfile) {
+      if (!data) {
         throw { name: "Login First" };
       }
 
@@ -79,9 +80,20 @@ class ControllerUser {
     }
   }
 
-  static async updateProfile(req, res, next) {
+  static async updateUser(req, res, next) {
     try {
-      // const {} = req.body;
+      const { char = "basic", skin = "basic" } = req.body;
+      const { id } = req.user;
+
+      const data = await User.findByPk(id);
+
+      data.set({
+        selectedChar: char,
+        selectedSkin: skin,
+      });
+
+      await data.save();
+      res.status(200).json("Updated");
     } catch (err) {
       console.log(err);
     }
@@ -141,6 +153,37 @@ class ControllerUser {
     } catch (error) {
       next(error)
       await trans.rollback();
+    }
+  }
+
+  static async updateScore(req, res, next) {
+    try {
+      const { difficulty, score } = req.body;
+      const { id } = req.user;
+      const data = await User.findByPk(id);
+
+      if (difficulty === "easy") {
+        if (data.easyScore < score) {
+          data.easyScore = score;
+        }
+      } else if (difficulty === "medium") {
+        if (data.mediumScore < score) {
+          data.mediumScore = score;
+        }
+      } else if (difficulty === "hard") {
+        if (data.hardScore < score) {
+          data.hardScore = score;
+        }
+      } else {
+        if (data.impossibleScore < score) {
+          data.impossibleScore = score;
+        }
+      }
+
+      await data.save();
+      res.status(200).json("Score Updated");
+    } catch (err) {
+      console.log(err);
     }
   }
 }
