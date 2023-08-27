@@ -3,7 +3,7 @@ const errorHandler = (err, req, res, next) => {
     let message = '';
     let statusCode = 500;
 
-    console.log(err.name);
+    // console.log(err.name);
     console.log(err)
 
     switch(err.name) {
@@ -14,9 +14,19 @@ const errorHandler = (err, req, res, next) => {
             break;
         case 'Wrong password':
         case 'Invalid Email/Password':
-        case "Login First":
+        case 'email is require':
+        case 'password is require':
+        case 'failed, amount is require':
             message = err.name;
             statusCode = 400;
+            break;
+        case "Login First":
+            message = err.name;
+            statusCode = 401
+                break;
+        case 'JsonWebTokenError':
+            message = 'invalid token';
+            statusCode = 401;
             break;
         default:
             message = 'Internal server error'

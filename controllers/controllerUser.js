@@ -1,5 +1,5 @@
 const midtrandClient = require('midtrans-client')
-const { User, Profile, sequelize, TransactionHistory } = require("../models");
+const { User, sequelize, TransactionHistory } = require("../models");
 const { comparePassword, signToken } = require("../helpers");
 
 class ControllerUser {
@@ -8,9 +8,10 @@ class ControllerUser {
     try {
       const { email, password, username } = req.body;
 
-      const dataUser = await User.create({
+      await User.create({
         email,
         password,
+        username
       });
 
       res.status(201).json({
@@ -18,7 +19,7 @@ class ControllerUser {
         msg: "User Created",
       });
     } catch (err) {
-      console.log(err);
+      // console.log(err);
       next(err);
     }
   }
@@ -27,33 +28,30 @@ class ControllerUser {
     try {
       const { email, password } = req.body;
 
-      const data = await User.findOne({
+      if(!email) throw { name : 'Invalid Email/Password'}
+      if(!password) throw { name : 'Invalid Email/Password'}
+
+      const userLogged = await User.findOne({
         where: { email },
       });
 
-      if (!data) {
-        throw { name: "Invalid Email/Password" };
-      }
+      if (!userLogged) throw { name: "Invalid Email/Password" };
+      
+      if (!comparePassword(password, userLogged.password)) throw { name: "Wrong password" };
 
-      const passwordValid = comparePassword(password, data.password);
+      const access_token = signToken({
+        id: userLogged.id,
+        username: userLogged.username,
+        email: userLogged.email,
+      });
 
-      if (!passwordValid) {
-        throw { name: "Wrong password" };
-      } else {
-        const profile = await Profile.findByPk(data.id);
-        const access_token = signToken({
-          id: data.id,
-          username: profile.username,
-          email: data.email,
-        });
+      res.status(200).json({
+        statusCode: 200,
+        access_token,
+      });
 
-        res.status(200).json({
-          statusCode: 200,
-          access_token,
-        });
-      }
     } catch (err) {
-      console.log(err);
+      console.log(err, 'err login');
       next(err);
     }
   }
@@ -61,19 +59,19 @@ class ControllerUser {
   static async getProfile(req, res, next) {
     try {
       const { id } = req.user;
-      const dataProfile = await Profile.findByPk(id, {
+      const dataProfile = await User.findByPk(id, {
         attributes: {
           exclude: ["password", "createdAt", "updatedAt"],
 
         },
       });
 
-      if (!data) {
+      if (!dataProfile) {
         throw { name: "Login First" };
       }
 
       res.status(200).json({
-        data: dataProfile,
+        user: dataProfile,
       });
     } catch (err) {
       console.log(err);
@@ -103,8 +101,9 @@ class ControllerUser {
     try {
 
       const { amount } = req.body
-      // const findUser = await User.findByPk(req.user.id)
+      if(!amount) throw { name: 'failed, amount is require'}
 
+      const logedUser = await User.findOne({where:{email: req.user.email}})
       // initialize midtrans
       const snap = new midtrandClient.Snap({
         isProduction: false,
@@ -184,6 +183,7 @@ class ControllerUser {
       res.status(200).json("Score Updated");
     } catch (err) {
       console.log(err);
+      next(err)
     }
   }
 }
