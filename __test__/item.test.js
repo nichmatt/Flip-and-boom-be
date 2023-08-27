@@ -1,6 +1,6 @@
-const { app } = require("../app");
 const request = require("supertest");
-const { News } = require("../models");
+const { app } = require("../app");
+const { Item } = require("../models");
 
 const dummyUser = {
   username: "jhon",
@@ -8,10 +8,10 @@ const dummyUser = {
   password: "jhon12345",
 };
 
-const access_token =
+const access_token1 =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJqaG9uIiwiZW1haWwiOiJqaG9uQG1haWwuY29tIiwiaWF0IjoxNjkzMDYzNTg4fQ.vl48zlDAtDXNv9n3HSxByBMeQFg3wTJVdqvigPZgzgI";
 
-describe.skip("news testing", () => {
+describe("Item", () => {
   beforeAll(async () => {
     try {
       await User.create({
@@ -34,13 +34,16 @@ describe.skip("news testing", () => {
       console.log(error);
     }
   });
-
-  test("success get news", async () => {
-    const result = await request(app)
-      .get("/news")
-      .set("access_token", access_token);
-    console.log(result.body);
-    expect(result.status).toEqual(200);
-    expect(result.body).toContain({});
+  test("if status 200, show item", async () => {
+    const res = await request(app)
+      .get("/items")
+      .set("access_token", access_token1);
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("item");
+  });
+  test("if item status 401, not logged in", async () => {
+    const res = await request(app).get("/items");
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("msg", "Login First");
   });
 });
