@@ -34,5 +34,44 @@
         "email": "tes6@mail.com",
         "password": "tes654321",
         "easyScore": 1000
+    },
+    {
+        "email": "test",
+        "password": "12345",
+        "username": "siTest",
+        "exprience" : 0,
+        "balance": 10,
+        "selectedSkin": "basic",
+        "selectedChar": "basic",
+        "easyScore": 0,
+        "mediumScore": 0,
+        "hardScore": 0,
+        "impossibleScore": 0
+    },
+    {
+        "email": "test2",
+        "password": "12345",
+        "username": "siTest2",
+        "exprience" : 0,
+        "balance": 10,
+        "selectedSkin": "basic",
+        "selectedChar": "basic",
+        "easyScore": 0,
+        "mediumScore": 0,
+        "hardScore": 0,
+        "impossibleScore": 0
+    },
+    {
+        "email": "test3",
+        "password": "12345",
+        "username": "siTest3",
+        "exprience" : 0,
+        "balance": 10,
+        "selectedSkin": "basic",
+        "selectedChar": "basic",
+        "easyScore": 0,
+        "mediumScore": 0,
+        "hardScore": 0,
+        "impossibleScore": 0
     }
 ]

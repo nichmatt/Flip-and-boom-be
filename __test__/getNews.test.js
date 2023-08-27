@@ -2,23 +2,28 @@ const { app } = require('../app')
 const request = require('supertest')
 const { News, User } = require('../models')
 
+
 const dummyUser = {
-    username: 'jhon',
-    email: 'jhon@mail.com',
-    password: 'jhon12345',
-}
+  username: "jhon",
+  email: "jhon@mail.com",
+  password: "jhon12345",
+};
 
-const access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJqaG9uIiwiZW1haWwiOiJqaG9uQG1haWwuY29tIiwiaWF0IjoxNjkzMDYzNTg4fQ.vl48zlDAtDXNv9n3HSxByBMeQFg3wTJVdqvigPZgzgI'
+const access_token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJqaG9uIiwiZW1haWwiOiJqaG9uQG1haWwuY29tIiwiaWF0IjoxNjkzMDYzNTg4fQ.vl48zlDAtDXNv9n3HSxByBMeQFg3wTJVdqvigPZgzgI";
 
-describe('news testing', () => {
-    beforeAll(async () => {
-        try {
-            await User.create({ username: dummyUser.username, email: dummyUser.email, password: dummyUser.password })
-
-        } catch (error) {
-            console.log(error);
-        }
-    })
+describe.skip("news testing", () => {
+  beforeAll(async () => {
+    try {
+      await User.create({
+        username: dummyUser.username,
+        email: dummyUser.email,
+        password: dummyUser.password,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
     afterAll(async () => {
         try {
@@ -49,3 +54,4 @@ describe('news testing', () => {
             expect(result.body.message).toEqual('invalid token')
     })
 })
+

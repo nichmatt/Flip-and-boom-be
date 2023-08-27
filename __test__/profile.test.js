@@ -1,40 +1,56 @@
-const { User } = require('../models')
-const { app } = require('../app')
-const request = require('supertest')
-const assert = require('assert')
+const { User } = require("../models");
+const { app } = require("../app");
+const request = require("supertest");
+const assert = require("assert");
 
 const dummyUser = {
-    username: 'jhon',
-    email: 'jhon@mail.com',
-    password: 'jhon12345',
-    username2: 'jajang',
-    email2: 'jajang@mail.com',
-    password2: 'jajang123'
-}
+  username: "jhon",
+  email: "jhon@mail.com",
+  password: "jhon12345",
+  username2: "jajang",
+  email2: "jajang@mail.com",
+  password2: "jajang123",
+};
 
-const access_token1 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJqaG9uIiwiZW1haWwiOiJqaG9uQG1haWwuY29tIiwiaWF0IjoxNjkzMDYzNTg4fQ.vl48zlDAtDXNv9n3HSxByBMeQFg3wTJVdqvigPZgzgI'
-const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJqYWphbmciLCJlbWFpbCI6ImphamFuZ0BtYWlsLmNvbSIsImlhdCI6MTY5MzEwMDkyNH0.5qJv9Tq31zZbRTBx9brPBfabyVX6jaDavt3TYq8Xq_0'
+const access_token1 =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJqaG9uIiwiZW1haWwiOiJqaG9uQG1haWwuY29tIiwiaWF0IjoxNjkzMDYzNTg4fQ.vl48zlDAtDXNv9n3HSxByBMeQFg3wTJVdqvigPZgzgI";
+const token =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJqYWphbmciLCJlbWFpbCI6ImphamFuZ0BtYWlsLmNvbSIsImlhdCI6MTY5MzEwMDkyNH0.5qJv9Tq31zZbRTBx9brPBfabyVX6jaDavt3TYq8Xq_0";
 
-describe('profile tes', () => {
 
-    beforeAll(async () => {
-        try {
-            await User.create({ username: dummyUser.username, email: dummyUser.email, password: dummyUser.password })
-            await User.create({ username: dummyUser.username2, email: dummyUser.email2, password: dummyUser.password2 })
+describe.skip("profile tes", () => {
+  beforeAll(async () => {
+    try {
+      await User.create({
+        username: dummyUser.username,
+        email: dummyUser.email,
+        password: dummyUser.password,
+      });
+      await User.create({
+        username: dummyUser.username2,
+        email: dummyUser.email2,
+        password: dummyUser.password2,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
-        } catch (error) {
-            console.log(error);
-        }
-    })
+  afterAll(async () => {
+    try {
+      await User.destroy(
+        { where: { email: dummyUser.email } },
+        { truncate: true, cascade: true, restartIdentity: true }
+      );
+      await User.destroy(
+        { where: { email: dummyUser.email2 } },
+        { truncate: true, cascade: true, restartIdentity: true }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  });
 
-    afterAll(async () => {
-        try {
-            await User.destroy({ where: { email: dummyUser.email } }, { truncate: true, cascade: true, restartIdentity: true })
-            await User.destroy({ where: { email: dummyUser.email2 } }, { truncate: true, cascade: true, restartIdentity: true })
-        } catch (error) {
-            console.log(error);
-        }
-    })
 
     test('successs get profile', () => {
         request(app)

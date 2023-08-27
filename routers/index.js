@@ -8,6 +8,7 @@ const { Authentication } = require("../middlewares");
 
 router.post("/register", ControllerUser.register);
 router.post("/login", ControllerUser.login);
+router.post("/postNews", ControllerNews.postNews);
 router.use(Authentication);
 router.get("/profile", ControllerUser.getProfile);
 router.put("/update", ControllerUser.updateUser);

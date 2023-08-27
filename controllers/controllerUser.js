@@ -1,4 +1,3 @@
-
 const midtrandClient = require("midtrans-client");
 const {
   User,
@@ -18,19 +17,16 @@ class ControllerUser {
       await User.create({
         email,
         password,
-        username
-
+        username,
       });
 
       res.status(201).json({
         statusCode: 201,
         msg: "User Created",
       });
-
     } catch (error) {
       console.log(error);
       next(error);
-
     }
   }
 
@@ -38,8 +34,8 @@ class ControllerUser {
     try {
       const { email, password } = req.body;
 
-      if (!email) throw { name: 'Invalid Email/Password' }
-      if (!password) throw { name: 'Invalid Email/Password' }
+      if (!email) throw { name: "Invalid Email/Password" };
+      if (!password) throw { name: "Invalid Email/Password" };
 
       const userLogged = await User.findOne({
         where: { email },
@@ -48,6 +44,7 @@ class ControllerUser {
       if (!userLogged) throw { name: "Invalid Email/Password" };
 
       if (!comparePassword(password, userLogged.password)) throw { name: "Wrong password" };
+
 
       const access_token = signToken({
         id: userLogged.id,
@@ -59,10 +56,8 @@ class ControllerUser {
         statusCode: 200,
         access_token,
       });
-
-
     } catch (err) {
-      console.log(err, 'err login');
+      console.log(err, "err login");
       next(err);
     }
   }
@@ -96,7 +91,6 @@ class ControllerUser {
     } catch (err) {
       console.log(err);
       next(err)
-
     }
   }
 
@@ -122,10 +116,13 @@ class ControllerUser {
 
   static async generateTokenMidtrans(req, res, next) {
     try {
-      const { amount } = req.body
-      if (!amount) throw { name: 'failed, amount is require' }
 
-      const logedUser = await User.findOne({ where: { email: req.user.email } })
+      const { amount } = req.body;
+      if (!amount) throw { name: "failed, amount is require" };
+
+      const logedUser = await User.findOne({
+        where: { email: req.user.email },
+      });
       // initialize midtrans
       const snap = new midtrandClient.Snap({
         isProduction: false,
@@ -216,8 +213,8 @@ class ControllerUser {
       } else {
         res.status(304).end()
       }
-
-
+      await data.save();
+      res.status(200).json("Score Updated");
     } catch (error) {
       console.log(error);
       next(error);
