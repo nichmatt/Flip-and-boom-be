@@ -1,3 +1,4 @@
+
 const midtrandClient = require("midtrans-client");
 const {
   User,
@@ -6,6 +7,7 @@ const {
   Inventory,
   Item,
 } = require("../models");
+
 const { comparePassword, signToken } = require("../helpers");
 
 class ControllerUser {
@@ -16,16 +18,19 @@ class ControllerUser {
       await User.create({
         email,
         password,
-        username,
+        username
+
       });
 
       res.status(201).json({
         statusCode: 201,
         msg: "User Created",
       });
+
     } catch (error) {
       console.log(error);
       next(error);
+
     }
   }
 
@@ -33,39 +38,39 @@ class ControllerUser {
     try {
       const { email, password } = req.body;
 
-      const data = await User.findOne({
+      if(!email) throw { name : 'Invalid Email/Password'}
+      if(!password) throw { name : 'Invalid Email/Password'}
+
+      const userLogged = await User.findOne({
         where: { email },
       });
 
-      if (!data) {
-        throw { name: "Invalid Email/Password" };
-      }
+      if (!userLogged) throw { name: "Invalid Email/Password" };
+      
+      if (!comparePassword(password, userLogged.password)) throw { name: "Wrong password" };
 
-      const passwordValid = comparePassword(password, data.password);
+      const access_token = signToken({
+        id: userLogged.id,
+        username: userLogged.username,
+        email: userLogged.email,
+      });
 
-      if (!passwordValid) {
-        throw { name: "Wrong password" };
-      } else {
-        const access_token = signToken({
-          id: data.id,
-          username: data.username,
-          email: data.email,
-        });
+      res.status(200).json({
+        statusCode: 200,
+        access_token,
+      });
 
-        res.status(200).json({
-          statusCode: 200,
-          access_token,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      next(error);
+
+    } catch (err) {
+      console.log(err, 'err login');
+      next(err);
     }
   }
 
   static async getProfile(req, res, next) {
     try {
       const { id } = req.user;
+
       const data = await User.findByPk(id, {
         include: {
           model: Inventory,
@@ -87,10 +92,10 @@ class ControllerUser {
       if (!data) {
         throw { name: "Login First" };
       }
-
       res.status(200).json(data);
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+      console.log(err);
+
     }
   }
 
@@ -115,9 +120,10 @@ class ControllerUser {
 
   static async generateTokenMidtrans(req, res, next) {
     try {
-      const { amount } = req.body;
-      // const findUser = await User.findByPk(req.user.id)
+      const { amount } = req.body
+      if(!amount) throw { name: 'failed, amount is require'}
 
+      const logedUser = await User.findOne({where:{email: req.user.email}})
       // initialize midtrans
       const snap = new midtrandClient.Snap({
         isProduction: false,
@@ -220,6 +226,7 @@ class ControllerUser {
 
       await data.save();
       res.status(200).json("Score Updated");
+
     } catch (error) {
       console.log(error);
       next(error);

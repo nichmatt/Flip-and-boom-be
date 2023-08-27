@@ -12,14 +12,46 @@ module.exports = {
       email: {
         allowNull: false,
         type: Sequelize.STRING,
+        unique:true,
+        validate: {
+          notNull: {
+            msg: "Email is required",
+          },
+          notEmpty: {
+            msg: "Email is required",
+          },
+          isEmail: {
+            msg: "Email format is required",
+          },
+        }
       },
       password: {
         allowNull: false,
         type: Sequelize.STRING,
+        validate: {
+          notNull: {
+            msg: "Password is required",
+          },
+          notEmpty: {
+            msg: "Password is required",
+          },
+          len: {
+            args: [5, Infinity],
+            msg: "Password length minimal 5 characters",
+          },
+        },
       },
       username: {
         allowNull: false,
         type: Sequelize.STRING,
+        validate: {
+          notEmpty: {
+            msg: "Username is required",
+          },
+          notNull: {
+            msg: "Username is required",
+          },
+        },
       },
       exprience: {
         defaultValue: 0,
