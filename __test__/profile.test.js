@@ -17,6 +17,7 @@ const access_token1 =
 const token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJqYWphbmciLCJlbWFpbCI6ImphamFuZ0BtYWlsLmNvbSIsImlhdCI6MTY5MzEwMDkyNH0.5qJv9Tq31zZbRTBx9brPBfabyVX6jaDavt3TYq8Xq_0";
 
+
 describe.skip("profile tes", () => {
   beforeAll(async () => {
     try {
@@ -50,35 +51,36 @@ describe.skip("profile tes", () => {
     }
   });
 
-  test("successs get profile", () => {
-    request(app)
-      .get("/profile")
-      .set("access_token", access_token1)
-      .expect("Content-Type", /json/)
-      .expect(200)
-      .then((res) => {
-        assert(res.body.username, dummyUser.username);
-        assert(res.body.email, dummyUser.email);
-      });
-  });
 
-  test("successs get profile user 2", () => {
-    request(app)
-      .get("/profile")
-      .set("access_token", token)
-      .expect("Content-Type", /json/)
-      .expect(200)
-      .then((res) => {
-        assert(res.body.username, dummyUser.username2);
-        assert(res.body.email, dummyUser.email2);
-      });
-  });
+    test('successs get profile', () => {
+        request(app)
+            .get('/profile')
+            .set('access_token', access_token1)
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then(res => {
+                assert(res.body.username, dummyUser.username)
+                assert(res.body.email, dummyUser.email)
+            })
+    })
 
-  test("failed get user, invalid access token", async () => {
-    const result = await request(app)
-      .get("/profile")
-      .set("access_token", "adadasdsdad");
-    expect(result.status).toEqual(401);
-    expect(result.body.message).toEqual("invalid token");
-  });
-});
+    test('successs get profile user 2', () => {
+        request(app)
+            .get('/profile')
+            .set('access_token', token)
+            .expect('Content-Type', /json/)
+            .expect(200)
+            .then(res => {
+                assert(res.body.username, dummyUser.username2)
+                assert(res.body.email, dummyUser.email2)
+            })
+    })
+
+    test('failed get user, invalid access token', async () => {
+        const result = await request(app)
+            .get('/profile')
+            .set('access_token', 'adadasdsdad')
+        expect(result.status).toEqual(401)
+        expect(result.body.message).toEqual('invalid token')
+    })
+})

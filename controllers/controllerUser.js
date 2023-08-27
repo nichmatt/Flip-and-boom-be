@@ -43,8 +43,8 @@ class ControllerUser {
 
       if (!userLogged) throw { name: "Invalid Email/Password" };
 
-      if (!comparePassword(password, userLogged.password))
-        throw { name: "Wrong password" };
+      if (!comparePassword(password, userLogged.password)) throw { name: "Wrong password" };
+
 
       const access_token = signToken({
         id: userLogged.id,
@@ -90,6 +90,7 @@ class ControllerUser {
       res.status(200).json(data);
     } catch (err) {
       console.log(err);
+      next(err)
     }
   }
 
@@ -106,14 +107,16 @@ class ControllerUser {
       });
 
       await data.save();
-      res.status(200).json("Updated");
+      res.status(200).json({ message: "Success Updated" });
     } catch (error) {
       console.log(error);
+      next(error)
     }
   }
 
   static async generateTokenMidtrans(req, res, next) {
     try {
+
       const { amount } = req.body;
       if (!amount) throw { name: "failed, amount is require" };
 
@@ -202,24 +205,14 @@ class ControllerUser {
       const { id } = req.user;
       const data = await User.findByPk(id);
 
-      if (difficulty === "easy") {
-        if (data.easyScore < score) {
-          data.easyScore = score;
-        }
-      } else if (difficulty === "medium") {
-        if (data.mediumScore < score) {
-          data.mediumScore = score;
-        }
-      } else if (difficulty === "hard") {
-        if (data.hardScore < score) {
-          data.hardScore = score;
-        }
-      } else {
-        if (data.impossibleScore < score) {
-          data.impossibleScore = score;
-        }
-      }
+      if(data[`${difficulty}Score`] < score) {
+        data[`${difficulty}Score`] = score
 
+        await data.save();
+        res.status(200).json({message: 'Success update'});
+      } else {
+        res.status(304).end()
+      }
       await data.save();
       res.status(200).json("Score Updated");
     } catch (error) {
@@ -260,6 +253,7 @@ class ControllerUser {
   static async getLeaderboard(req, res, next) {
     try {
       const { difficulty } = req.query;
+      if(!difficulty) throw {name : 'difficulty is require in query'}
       let choice = difficulty + "Score";
       let option = {
         order: [[choice, "desc"]],

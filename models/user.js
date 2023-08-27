@@ -70,11 +70,11 @@ module.exports = (sequelize, DataTypes) => {
       },
       selectedSkin: {
         type: DataTypes.STRING,
-        defaultValue: "basic",
+        defaultValue: "default",
       },
       selectedChar: {
         type: DataTypes.STRING,
-        defaultValue: "basic",
+        defaultValue: "default",
       },
       easyScore: {
         type: DataTypes.INTEGER,
