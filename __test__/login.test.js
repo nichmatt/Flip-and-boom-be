@@ -8,7 +8,7 @@ const dummyUser = {
     password: 'jhon12345'
 }
 
-describe.skip('login', () => {
+describe('login', () => {
 
     beforeAll(async () => {
         try {

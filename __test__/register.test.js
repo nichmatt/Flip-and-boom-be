@@ -8,7 +8,7 @@ const dummyUser = {
     password: 'jhon12345'
 }
 
-describe.skip('register', () => {
+describe('register', () => {
 
     afterAll(async () => {
         try {

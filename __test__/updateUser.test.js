@@ -1,6 +1,6 @@
-const { app } = require('../app')
+const { User } = require('../models')
 const request = require('supertest')
-const { News, User } = require('../models')
+const { app } = require('../app')
 
 const dummyUser = {
     username: 'jhon',
@@ -10,7 +10,8 @@ const dummyUser = {
 
 const access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJqaG9uIiwiZW1haWwiOiJqaG9uQG1haWwuY29tIiwiaWF0IjoxNjkzMDYzNTg4fQ.vl48zlDAtDXNv9n3HSxByBMeQFg3wTJVdqvigPZgzgI'
 
-describe('news testing', () => {
+describe('updatte user', () => {
+    
     beforeAll(async () => {
         try {
             await User.create({ username: dummyUser.username, email: dummyUser.email, password: dummyUser.password })
@@ -23,29 +24,38 @@ describe('news testing', () => {
     afterAll(async () => {
         try {
             await User.destroy({ where: { email: dummyUser.email } }, { truncate: true, cascade: true, restartIdentity: true })
-
         } catch (error) {
             console.log(error);
         }
     })
+    
 
-    test('success get news' , async () => {
+    test('success update selected skin user', async () => {
         const result = await request(app)
-            .get('/news')
+            .put('/update')
+            .send({skin: 'classic'})
             .set('access_token', access_token)
-            console.log(result.body);
-            console.log(result.body[0]);
             expect(result.status).toEqual(200)
-            expect(result.body[0]).toHaveProperty("title")
-            expect(result.body[0]).toHaveProperty("author", "Admin")
-            expect(result.body[0]).toHaveProperty("text")
+            expect(result.body).toHaveProperty("message", "Success Updated")
     })
 
-    test('failed get news, invalid access-token' , async () => {
+    test('success update selected char user', async () => {
         const result = await request(app)
-            .get('/news')
-            .set('access_token', 'adasdasd')
-            expect(result.status).toEqual(401)
-            expect(result.body.message).toEqual('invalid token')
+            .put('/update')
+            .send({char: 'king'})
+            .set('access_token', access_token)
+            expect(result.status).toEqual(200)
+            expect(result.body).toHaveProperty("message", "Success Updated")
     })
+
+    test('success update selected char and skin', async () => {
+        const result = await request(app)
+            .put('/update')
+            .send({char: 'king', skin: 'legend'})
+            .set('access_token', access_token)
+            expect(result.status).toEqual(200)
+            expect(result.body).toHaveProperty("message", "Success Updated")
+    })
+
+    
 })

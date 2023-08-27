@@ -17,10 +17,12 @@ const errorHandler = (err, req, res, next) => {
         case 'email is require':
         case 'password is require':
         case 'failed, amount is require':
+        case 'difficulty is require in query':
             message = err.name;
             statusCode = 400;
             break;
         case "Login First":
+        case 'invalid token':
             message = err.name;
             statusCode = 401
                 break;

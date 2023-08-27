@@ -15,7 +15,7 @@ const dummyUser = {
 const access_token1 = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJqaG9uIiwiZW1haWwiOiJqaG9uQG1haWwuY29tIiwiaWF0IjoxNjkzMDYzNTg4fQ.vl48zlDAtDXNv9n3HSxByBMeQFg3wTJVdqvigPZgzgI'
 const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJqYWphbmciLCJlbWFpbCI6ImphamFuZ0BtYWlsLmNvbSIsImlhdCI6MTY5MzEwMDkyNH0.5qJv9Tq31zZbRTBx9brPBfabyVX6jaDavt3TYq8Xq_0'
 
-describe.skip('profile tes', () => {
+describe('profile tes', () => {
 
     beforeAll(async () => {
         try {
@@ -43,8 +43,8 @@ describe.skip('profile tes', () => {
             .expect('Content-Type', /json/)
             .expect(200)
             .then(res => {
-                assert(res.body.user.username, dummyUser.username)
-                assert(res.body.user.email, dummyUser.email)
+                assert(res.body.username, dummyUser.username)
+                assert(res.body.email, dummyUser.email)
             })
     })
 
@@ -55,8 +55,8 @@ describe.skip('profile tes', () => {
             .expect('Content-Type', /json/)
             .expect(200)
             .then(res => {
-                assert(res.body.user.username, dummyUser.username2)
-                assert(res.body.user.email, dummyUser.email2)
+                assert(res.body.username, dummyUser.username2)
+                assert(res.body.email, dummyUser.email2)
             })
     })
 

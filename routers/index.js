@@ -12,10 +12,10 @@ router.use(Authentication);
 router.get("/profile", ControllerUser.getProfile);
 router.put("/update", ControllerUser.updateUser);
 router.patch("/updateScore", ControllerUser.updateScore);
-router.get("/items", ControllerItem.getItem);
 router.get("/news", ControllerNews.getNews);
 router.post("/user/topup", ControllerUser.topupBalance);
 router.post("/user/token-midtrans", ControllerUser.generateTokenMidtrans);
+router.get("/items", ControllerItem.getItem);
 router.post("/buyItem", ControllerUser.buyItem);
 router.get("/leaderboard", ControllerUser.getLeaderboard);
 

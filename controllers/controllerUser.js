@@ -38,15 +38,15 @@ class ControllerUser {
     try {
       const { email, password } = req.body;
 
-      if(!email) throw { name : 'Invalid Email/Password'}
-      if(!password) throw { name : 'Invalid Email/Password'}
+      if (!email) throw { name: 'Invalid Email/Password' }
+      if (!password) throw { name: 'Invalid Email/Password' }
 
       const userLogged = await User.findOne({
         where: { email },
       });
 
       if (!userLogged) throw { name: "Invalid Email/Password" };
-      
+
       if (!comparePassword(password, userLogged.password)) throw { name: "Wrong password" };
 
       const access_token = signToken({
@@ -95,6 +95,7 @@ class ControllerUser {
       res.status(200).json(data);
     } catch (err) {
       console.log(err);
+      next(err)
 
     }
   }
@@ -112,18 +113,19 @@ class ControllerUser {
       });
 
       await data.save();
-      res.status(200).json("Updated");
+      res.status(200).json({ message: "Success Updated" });
     } catch (error) {
       console.log(error);
+      next(error)
     }
   }
 
   static async generateTokenMidtrans(req, res, next) {
     try {
       const { amount } = req.body
-      if(!amount) throw { name: 'failed, amount is require'}
+      if (!amount) throw { name: 'failed, amount is require' }
 
-      const logedUser = await User.findOne({where:{email: req.user.email}})
+      const logedUser = await User.findOne({ where: { email: req.user.email } })
       // initialize midtrans
       const snap = new midtrandClient.Snap({
         isProduction: false,
@@ -206,26 +208,15 @@ class ControllerUser {
       const { id } = req.user;
       const data = await User.findByPk(id);
 
-      if (difficulty === "easy") {
-        if (data.easyScore < score) {
-          data.easyScore = score;
-        }
-      } else if (difficulty === "medium") {
-        if (data.mediumScore < score) {
-          data.mediumScore = score;
-        }
-      } else if (difficulty === "hard") {
-        if (data.hardScore < score) {
-          data.hardScore = score;
-        }
+      if(data[`${difficulty}Score`] < score) {
+        data[`${difficulty}Score`] = score
+
+        await data.save();
+        res.status(200).json({message: 'Success update'});
       } else {
-        if (data.impossibleScore < score) {
-          data.impossibleScore = score;
-        }
+        res.status(304).end()
       }
 
-      await data.save();
-      res.status(200).json("Score Updated");
 
     } catch (error) {
       console.log(error);
@@ -265,6 +256,7 @@ class ControllerUser {
   static async getLeaderboard(req, res, next) {
     try {
       const { difficulty } = req.query;
+      if(!difficulty) throw {name : 'difficulty is require in query'}
       let choice = difficulty + "Score";
       let option = {
         order: [[choice, "desc"]],
