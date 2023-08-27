@@ -62,11 +62,11 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       selectedSkin: {
-        defaultValue: "basic",
+        defaultValue: "default",
         type: Sequelize.STRING,
       },
       selectedChar: {
-        defaultValue: "basic",
+        defaultValue: "default",
         type: Sequelize.STRING,
       },
       easyScore: {
