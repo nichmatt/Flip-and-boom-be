@@ -6,8 +6,8 @@ class ControllerNews {
       const data = await News.findAll();
 
       res.status(200).json(data);
-    } catch (err) {
-      console.log(err);
+    } catch (error) {
+      console.log(error);
     }
   }
 }
