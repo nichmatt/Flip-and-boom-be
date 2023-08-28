@@ -25,6 +25,7 @@ describe("BuyItem", () => {
         username: dummyUser.username,
         email: dummyUser.email,
         password: dummyUser.password,
+        balance: 400
       });
     } catch (error) {
       console.log(error);
@@ -46,14 +47,22 @@ describe("BuyItem", () => {
     });
   });
 
-  test("if item status 201, item buyed", async () => {
+  test("success item buyed", async () => {
     const result = await request(app)
       .post("/buyItem")
-      .send({
-        ItemId: 1,
-      })
+      .send({ItemId: 1})
       .set("access_token", access_token1);
     expect(result.status).toBe(201);
-    expect(result.body).toHaveProperty("message", "Success Buy Item");
+    expect(result.body.message).toEqual("Success Buy Item")
   });
+
+  test("failed item buyed, balance not enough", async () => {
+    const result = await request(app)
+      .post("/buyItem")
+      .send({ItemId: 2})
+      .set("access_token", access_token1);
+    expect(result.status).toBe(400);
+    expect(result.body.message).toEqual("Not enough balance")
+  });
+
 });

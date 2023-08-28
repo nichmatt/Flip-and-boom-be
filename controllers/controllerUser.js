@@ -10,6 +10,7 @@ const {
 const { comparePassword, signToken } = require("../helpers");
 
 class ControllerUser {
+
   static async register(req, res, next) {
     try {
       const { email, password, username } = req.body;
@@ -22,10 +23,9 @@ class ControllerUser {
 
       res.status(201).json({
         statusCode: 201,
-        msg: "User Created",
+        message: "User Created",
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -57,7 +57,6 @@ class ControllerUser {
         access_token,
       });
     } catch (err) {
-      console.log(err, "err login");
       next(err);
     }
   }
@@ -84,16 +83,11 @@ class ControllerUser {
         },
       });
 
-      if (!data) {
-        throw { name: "Login First" };
-      }
       res.status(200).json(data);
     } catch (err) {
-      console.log(err);
       next(err)
     }
   }
-
   static async updateUser(req, res, next) {
     try {
       const { char = "basic", skin = "basic" } = req.body;
@@ -109,7 +103,6 @@ class ControllerUser {
       await data.save();
       res.status(200).json({ message: "Success Updated" });
     } catch (error) {
-      console.log(error);
       next(error)
     }
   }
@@ -154,6 +147,7 @@ class ControllerUser {
   }
 
   static async topupBalance(req, res, next) {
+    
     const trans = sequelize.transaction();
     try {
       const { amount, status, orderId } = req.body;
@@ -216,7 +210,6 @@ class ControllerUser {
       await data.save();
       res.status(200).json("Score Updated");
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
@@ -242,10 +235,9 @@ class ControllerUser {
       });
 
       res.status(201).json({
-        msg: "Success Buy Item",
+        message: "Success Buy Item",
       });
     } catch (error) {
-      console.log(error);
       next(error);
     }
   }
