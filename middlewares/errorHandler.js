@@ -19,6 +19,8 @@ const errorHandler = (err, req, res, next) => {
         case 'failed, amount is require':
         case 'difficulty is require in query':
         case "Not enough balance":
+        case 'transaction failed':
+        case 'not valid transaction':
             message = err.name;
             statusCode = 400;
             break;
