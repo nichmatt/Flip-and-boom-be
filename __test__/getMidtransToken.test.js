@@ -16,7 +16,7 @@ const access_token1 =
 const token =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwidXNlcm5hbWUiOiJqYWphbmciLCJlbWFpbCI6ImphamFuZ0BtYWlsLmNvbSIsImlhdCI6MTY5MzEwMDkyNH0.5qJv9Tq31zZbRTBx9brPBfabyVX6jaDavt3TYq8Xq_0";
 
-describe.skip("midtrans tes", () => {
+describe("midtrans tes", () => {
   beforeAll(async () => {
     try {
       await User.create({

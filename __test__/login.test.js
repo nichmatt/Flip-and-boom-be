@@ -9,7 +9,7 @@ const dummyUser = {
 };
 
 
-describe.skip("login", () => {
+describe("login", () => {
   beforeAll(async () => {
     try {
       await User.create({

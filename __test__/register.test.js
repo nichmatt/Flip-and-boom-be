@@ -8,7 +8,7 @@ const dummyUser = {
   password: "jhon12345",
 };
 
-describe.skip("register", () => {
+describe("register", () => {
   afterAll(async () => {
     try {
       await User.destroy(
@@ -27,7 +27,7 @@ describe.skip("register", () => {
       password: dummyUser.password,
     });
     expect(result.status).toEqual(201);
-    expect(result.body.msg).toEqual("User Created");
+    expect(result.body.message).toEqual("User Created");
   });
 
   test("failed register, not uniq email", async () => {
@@ -86,4 +86,5 @@ describe.skip("register", () => {
     expect(result.status).toEqual(400);
     expect(result.body.message).toEqual("Password length minimal 5 characters");
   });
+  
 });
