@@ -1,5 +1,15 @@
 [
     {
+        "name": "default",
+        "type":"char",
+        "price": 0
+    },
+    {
+        "name": "default",
+        "type": "skin",
+        "price": 0
+    },
+    {
         "name": "mr-king",
         "type":"char",
         "price": 350
@@ -40,11 +50,6 @@
         "price": 275
     },
     {
-        "name": "default",
-        "type":"char",
-        "price": 0
-    },
-    {
         "name": "amethyst",
         "type":"skin",
         "price": 50
@@ -64,4 +69,5 @@
         "type":"skin",
         "price": 50
     }
+
 ]

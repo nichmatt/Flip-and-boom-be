@@ -14,11 +14,16 @@ class ControllerUser {
     try {
       const { email, password, username } = req.body;
 
-      await User.create({
+      const newUser = await User.create({
         email,
         password,
         username,
       });
+
+      const itemDefault = await Item.findAll({where: {name: 'default'}})
+    
+      await Inventory.create({UserId: newUser.id, ItemId: itemDefault[0].id})
+      await Inventory.create({UserId: newUser.id, ItemId: itemDefault[1].id})
 
       res.status(201).json({
         statusCode: 201,
@@ -131,8 +136,8 @@ class ControllerUser {
           secure: true,
         },
         customer_details: {
-          first_name: "jajang",
-          email: "nugraha@mail.com",
+          username: logedUser.username,
+          email: logedUser.email,
           order_date: new Date(),
         },
       };
@@ -145,48 +150,38 @@ class ControllerUser {
   }
 
   static async topupBalance(req, res, next) {
-    const trans = sequelize.transaction();
-    try {
-      const { amount, status, orderId } = req.body;
-      const findedUser = await User.findByPk(req.user.id);
 
+    const trans = await sequelize.transaction();
+    try {
+      const { amount, topupBalance, status, orderId } = req.body;
+      if(!orderId) throw {name: 'not valid transaction'}
+      if (status !== 'success' && status !== 'cancel') throw { name: 'transaction failed' }
+      const findedUser = await User.findByPk(req.user.id);
       if (status === "success") {
         await User.update(
-          { balance: findedUser.balance + amount },
+          { balance: findedUser.balance + topupBalance },
           { where: { id: req.user.id } },
           { transaction: trans }
         );
-        await TransactionHistory.create(
-          {
-            UserId: req.user.id,
-            OrderId: orderId,
-            amount,
-            status,
-            name: findedUser.username,
-            type: "topup-midtrans",
-          },
-          { transaction: trans }
-        );
-        res.status(201).json({ message: "topup success" });
-        await trans.commit();
-      } else {
-        await TransactionHistory.create(
-          {
-            UserId: req.user.id,
-            OrderId: orderId,
-            amount,
-            status,
-            name: findedUser.username,
-            type: "topup-midtrans",
-          },
-          { transaction: trans }
-        );
-        res.status(201).json({ message: "topup failed" });
-        await trans.commit();
       }
+
+      await TransactionHistory.create(
+        {
+          UserId: findedUser.id,
+          OrderId: orderId,
+          amount,
+          status,
+          name: findedUser.username,
+          type: "topup-midtrans",
+        },
+        { transaction: trans }
+      );
+      await trans.commit();
+      res.status(201).json({ message: `topup ${status}` });
     } catch (error) {
-      next(error);
       await trans.rollback();
+      console.log(error.name, 'name error');
+      next(error);
     }
   }
 
@@ -201,6 +196,7 @@ class ControllerUser {
 
         await data.save();
         res.status(200).json({ message: "Success update" });
+
       } else {
         res.status(304).end();
       }
@@ -243,6 +239,7 @@ class ControllerUser {
     try {
       const { difficulty } = req.query;
       if (!difficulty) throw { name: "difficulty is require in query" };
+
       let choice = difficulty + "Score";
       let option = {
         order: [[choice, "desc"]],
