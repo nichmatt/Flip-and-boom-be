@@ -20,10 +20,10 @@ class ControllerUser {
         username,
       });
 
-      const itemDefault = await Item.findAll({where: {name: 'default'}})
-    
-      await Inventory.create({UserId: newUser.id, ItemId: itemDefault[0].id})
-      await Inventory.create({UserId: newUser.id, ItemId: itemDefault[1].id})
+      const itemDefault = await Item.findAll({ where: { name: 'default' } })
+
+      await Inventory.create({ UserId: newUser.id, ItemId: itemDefault[0].id })
+      await Inventory.create({ UserId: newUser.id, ItemId: itemDefault[1].id })
 
       res.status(201).json({
         statusCode: 201,
@@ -78,7 +78,7 @@ class ControllerUser {
           include: {
             model: Item,
             attributes: {
-              exclude: ["id", "createdAt", "updatedAt"],
+              exclude: ["createdAt", "updatedAt"],
             },
           },
         },
@@ -94,7 +94,7 @@ class ControllerUser {
   }
   static async updateUser(req, res, next) {
     try {
-      const { char = "basic", skin = "basic" } = req.body;
+      const { char, skin } = req.body;
       const { id } = req.user;
 
       const data = await User.findByPk(id);
@@ -154,7 +154,7 @@ class ControllerUser {
     const trans = await sequelize.transaction();
     try {
       const { amount, topupBalance, status, orderId } = req.body;
-      if(!orderId) throw {name: 'not valid transaction'}
+      if (!orderId) throw { name: 'not valid transaction' }
       if (status !== 'success' && status !== 'cancel') throw { name: 'transaction failed' }
       const findedUser = await User.findByPk(req.user.id);
       if (status === "success") {
@@ -180,7 +180,7 @@ class ControllerUser {
       res.status(201).json({ message: `topup ${status}` });
     } catch (error) {
       await trans.rollback();
-      console.log(error.name, 'name error');
+      // console.log(error.name, 'name error');
       next(error);
     }
   }
@@ -209,24 +209,47 @@ class ControllerUser {
 
   static async buyItem(req, res, next) {
     try {
-      const { ItemId } = req.body;
+      const { ItemId, price } = req.body;
       const { id } = req.user;
 
-      const item = await Item.findByPk(ItemId);
       const user = await User.findByPk(id);
+      const random = Math.floor(Math.random() * new Date().getTime())
+      if (ItemId) {
+        const item = await Item.findByPk(ItemId);
 
-      if (user.balance < item.price) {
-        throw { name: "Not enough balance" };
+        if (user.balance < item.price) throw { name: "Not enough balance" };
+
+        user.balance = user.balance - item.price;
+
+        await Inventory.create({
+          UserId: id,
+          ItemId,
+        });
+
+        await TransactionHistory.create({
+          UserId: id,
+          OrderId: random,
+          amount: item.price,
+          status: 'success',
+          type: 'shop-item',
+          name: user.username
+        })
+
+      } else {
+
+        if (user.balance < price) throw { name: "Not enough balance" };
+        user.balance = user.balance - price;
+
+        await TransactionHistory.create({
+          UserId: id,
+          OrderId: random,
+          amount: price,
+          status: 'success',
+          type: 'shop-item',
+          name: user.username
+        })
       }
-
-      user.balance = user.balance - item.price;
       user.save();
-
-      await Inventory.create({
-        UserId: id,
-        ItemId,
-      });
-
       res.status(201).json({
         message: "Success Buy Item",
       });
