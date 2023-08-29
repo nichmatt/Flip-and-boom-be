@@ -10,7 +10,6 @@ const {
 const { comparePassword, signToken } = require("../helpers");
 
 class ControllerUser {
-
   static async register(req, res, next) {
     try {
       const { email, password, username } = req.body;
@@ -48,8 +47,8 @@ class ControllerUser {
 
       if (!userLogged) throw { name: "Invalid Email/Password" };
 
-      if (!comparePassword(password, userLogged.password)) throw { name: "Wrong password" };
-
+      if (!comparePassword(password, userLogged.password))
+        throw { name: "Wrong password" };
 
       const access_token = signToken({
         id: userLogged.id,
@@ -90,7 +89,7 @@ class ControllerUser {
 
       res.status(200).json(data);
     } catch (err) {
-      next(err)
+      next(err);
     }
   }
   static async updateUser(req, res, next) {
@@ -108,7 +107,7 @@ class ControllerUser {
       await data.save();
       res.status(200).json({ message: "Success Updated" });
     } catch (error) {
-      next(error)
+      next(error);
     }
   }
 
@@ -193,12 +192,13 @@ class ControllerUser {
       const data = await User.findByPk(id);
 
       if (data[`${difficulty}Score`] < score) {
-        data[`${difficulty}Score`] = score
+        data[`${difficulty}Score`] = score;
 
         await data.save();
-        res.status(200).json({ message: 'Success update' });
+        res.status(200).json({ message: "Success update" });
+
       } else {
-        res.status(304).end()
+        res.status(304).end();
       }
       await data.save();
       res.status(200).json("Score Updated");
@@ -238,7 +238,8 @@ class ControllerUser {
   static async getLeaderboard(req, res, next) {
     try {
       const { difficulty } = req.query;
-      if (!difficulty) throw { name: 'difficulty is require in query' }
+      if (!difficulty) throw { name: "difficulty is require in query" };
+
       let choice = difficulty + "Score";
       let option = {
         order: [[choice, "desc"]],
