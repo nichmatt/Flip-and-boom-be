@@ -15,11 +15,16 @@ class ControllerUser {
     try {
       const { email, password, username } = req.body;
 
-      await User.create({
+      const newUser = await User.create({
         email,
         password,
         username,
       });
+
+      const itemDefault = await Item.findAll({where: {name: 'default'}})
+    
+      await Inventory.create({UserId: newUser.id, ItemId: itemDefault[0].id})
+      await Inventory.create({UserId: newUser.id, ItemId: itemDefault[1].id})
 
       res.status(201).json({
         statusCode: 201,
