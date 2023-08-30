@@ -39,39 +39,39 @@
         "email": "test",
         "password": "12345",
         "username": "siTest",
-        "exprience" : 0,
+        "experience" : 0,
         "balance": 10,
         "selectedSkin": "basic",
         "selectedChar": "basic",
-        "easyScore": 0,
-        "mediumScore": 0,
-        "hardScore": 0,
-        "impossibleScore": 0
+        "easyScore": 1212,
+        "mediumScore": 232,
+        "hardScore": 2321,
+        "impossibleScore": 120
     },
     {
         "email": "test2",
         "password": "12345",
         "username": "siTest2",
-        "exprience" : 0,
+        "experience" : 0,
         "balance": 10,
         "selectedSkin": "basic",
         "selectedChar": "basic",
-        "easyScore": 0,
-        "mediumScore": 0,
-        "hardScore": 0,
-        "impossibleScore": 0
+        "easyScore": 230,
+        "mediumScore": 340,
+        "hardScore": 700,
+        "impossibleScore": 600
     },
     {
         "email": "test3",
         "password": "12345",
         "username": "siTest3",
-        "exprience" : 0,
+        "experience" : 0,
         "balance": 10,
         "selectedSkin": "basic",
         "selectedChar": "basic",
-        "easyScore": 0,
-        "mediumScore": 0,
-        "hardScore": 0,
-        "impossibleScore": 0
+        "easyScore": 100,
+        "mediumScore": 200,
+        "hardScore": 300,
+        "impossibleScore": 400
     }
 ]

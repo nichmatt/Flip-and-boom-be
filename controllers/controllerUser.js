@@ -187,10 +187,11 @@ class ControllerUser {
 
   static async updateScore(req, res, next) {
     try {
-      const { difficulty, score } = req.body;
+      const { difficulty, score, experience = 0 } = req.body;
       const { id } = req.user;
       const data = await User.findByPk(id);
 
+      data.experience = data.experience + experience;
       if (data[`${difficulty}Score`] < score) {
         data[`${difficulty}Score`] = score;
 

@@ -12,7 +12,7 @@ module.exports = {
       email: {
         allowNull: false,
         type: Sequelize.STRING,
-        unique:true,
+        unique: true,
         validate: {
           notNull: {
             msg: "Email is required",
@@ -23,7 +23,7 @@ module.exports = {
           isEmail: {
             msg: "Email format is required",
           },
-        }
+        },
       },
       password: {
         allowNull: false,
@@ -53,7 +53,7 @@ module.exports = {
           },
         },
       },
-      exprience: {
+      experience: {
         defaultValue: 0,
         type: Sequelize.INTEGER,
       },
