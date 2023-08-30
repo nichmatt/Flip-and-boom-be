@@ -58,7 +58,7 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       balance: {
-        defaultValue: 10,
+        // defaultValue: 10,
         type: Sequelize.INTEGER,
       },
       selectedSkin: {
