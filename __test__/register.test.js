@@ -1,16 +1,30 @@
 const request = require("supertest");
 const { app } = require("../app");
-const { User } = require("../models");
+const { User, Item } = require("../models");
+const item = require("../db/item.json");
 
 const dummyUser = {
-  username: "jhon",
-  email: "jhon@mail.com",
-  password: "jhon12345",
+  username: "akukeren",
+  email: "akukeren@mail.com",
+  password: "akukeren",
 };
 
 describe("register", () => {
+  beforeAll(async () => {
+    try {
+      await Item.bulkCreate(item);
+    } catch (error) {
+      console.log(error);
+    }
+  });
+
   afterAll(async () => {
     try {
+      await Item.destroy({
+        truncate: true,
+        cascade: true,
+        restartIdentity: true,
+      });
       await User.destroy(
         { where: { email: dummyUser.email } },
         { truncate: true, cascade: true, restartIdentity: true }
@@ -26,6 +40,7 @@ describe("register", () => {
       email: dummyUser.email,
       password: dummyUser.password,
     });
+    console.log(result, "<<<<<<<<<, 29");
     expect(result.status).toEqual(201);
     expect(result.body.message).toEqual("User Created");
   });
@@ -86,5 +101,4 @@ describe("register", () => {
     expect(result.status).toEqual(400);
     expect(result.body.message).toEqual("Password length minimal 5 characters");
   });
-  
 });

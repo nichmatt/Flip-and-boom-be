@@ -19,11 +19,11 @@ class ControllerUser {
         password,
         username,
       });
+      console.log(newUser);
+      const itemDefault = await Item.findAll({ where: { name: "default" } });
 
-      const itemDefault = await Item.findAll({ where: { name: 'default' } })
-
-      await Inventory.create({ UserId: newUser.id, ItemId: itemDefault[0].id })
-      await Inventory.create({ UserId: newUser.id, ItemId: itemDefault[1].id })
+      await Inventory.create({ UserId: newUser.id, ItemId: itemDefault[0].id });
+      await Inventory.create({ UserId: newUser.id, ItemId: itemDefault[1].id });
 
       res.status(201).json({
         statusCode: 201,
@@ -150,12 +150,12 @@ class ControllerUser {
   }
 
   static async topupBalance(req, res, next) {
-
     const trans = await sequelize.transaction();
     try {
       const { amount, topupBalance, status, orderId } = req.body;
-      if (!orderId) throw { name: 'not valid transaction' }
-      if (status !== 'success' && status !== 'cancel') throw { name: 'transaction failed' }
+      if (!orderId) throw { name: "not valid transaction" };
+      if (status !== "success" && status !== "cancel")
+        throw { name: "transaction failed" };
       const findedUser = await User.findByPk(req.user.id);
       if (status === "success") {
         await User.update(
@@ -196,7 +196,6 @@ class ControllerUser {
 
         await data.save();
         res.status(200).json({ message: "Success update" });
-
       } else {
         res.status(304).end();
       }
@@ -213,7 +212,7 @@ class ControllerUser {
       const { id } = req.user;
 
       const user = await User.findByPk(id);
-      const random = Math.floor(Math.random() * new Date().getTime())
+      const random = Math.floor(Math.random() * new Date().getTime());
       if (ItemId) {
         const item = await Item.findByPk(ItemId);
 
@@ -230,13 +229,11 @@ class ControllerUser {
           UserId: id,
           OrderId: random,
           amount: item.price,
-          status: 'success',
-          type: 'shop-item',
-          name: user.username
-        })
-
+          status: "success",
+          type: "shop-item",
+          name: user.username,
+        });
       } else {
-
         if (user.balance < price) throw { name: "Not enough balance" };
         user.balance = user.balance - price;
 
@@ -244,10 +241,10 @@ class ControllerUser {
           UserId: id,
           OrderId: random,
           amount: price,
-          status: 'success',
-          type: 'shop-item',
-          name: user.username
-        })
+          status: "success",
+          type: "shop-item",
+          name: user.username,
+        });
       }
       user.save();
       res.status(201).json({
