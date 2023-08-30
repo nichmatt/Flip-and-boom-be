@@ -18,6 +18,7 @@ class ControllerUser {
         email,
         password,
         username,
+        balance: 10,
       });
       console.log(newUser);
       const itemDefault = await Item.findAll({ where: { name: "default" } });
