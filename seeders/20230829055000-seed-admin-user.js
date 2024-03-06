@@ -14,7 +14,7 @@ module.exports = {
         hardScore: 1000,
         mediumScore: 1000,
         impossibleScore: 100,
-        balance: 99999,
+        balance: 9898989,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

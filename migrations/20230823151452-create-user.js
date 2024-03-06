@@ -54,11 +54,11 @@ module.exports = {
         },
       },
       experience: {
-        defaultValue: 0,
+        // defaultValue: 0,
         type: Sequelize.INTEGER,
       },
       balance: {
-        // defaultValue: 10,
+        defaultValue: 0,
         type: Sequelize.INTEGER,
       },
       selectedSkin: {

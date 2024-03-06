@@ -4,6 +4,7 @@
   "description": "Backend repository",
   "main": "index.js",
   "scripts": {
+    "dev": "nodemon bin/www",
     "start": "nodemon bin/www",
     "test": "jest --runInBand --forceExit --detectOpenHandles",
     "test2": "jest --runInBand --forceExit --detectOpenHandles --coverage",
