@@ -9,6 +9,13 @@ const { Authentication } = require("../middlewares");
 router.post("/register", ControllerUser.register);
 router.post("/login", ControllerUser.login);
 router.get("/news", ControllerNews.getNews);
+router.get("/", (req, res) => {
+  try {
+    res.status(200).json("flip and boom");
+  } catch (error) {
+    console.log(error);
+  }
+});
 router.use(Authentication);
 router.get("/profile", ControllerUser.getProfile);
 router.put("/update", ControllerUser.updateUser);
