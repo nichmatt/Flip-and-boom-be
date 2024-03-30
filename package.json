@@ -3,14 +3,12 @@
   "version": "1.0.0",
   "description": "Backend repository",
   "main": "index.js",
-  "engines": {"node": "20.x" },
+  "engines": {
+    "node": "20.x"
+  },
   "scripts": {
-    "dev": "node bin/www",
-    "start": "node bin/www",
-    "test": "jest --runInBand --forceExit --detectOpenHandles",
-    "test2": "jest --runInBand --forceExit --detectOpenHandles --coverage",
-    "create": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all",
-    "all": "npm run create && npm run start"
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +18,7 @@
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "git-cz": "^4.9.0",
     "jsonwebtoken": "^9.0.1",
     "midtrans-client": "^1.3.1",
     "pg": "^8.11.3",

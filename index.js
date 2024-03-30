@@ -1,8 +1,7 @@
-"use strict";
-
 require("dotenv").config();
 
 const express = require("express");
+const PORT = 3001;
 const cors = require("cors");
 const app = express();
 const router = require("./routers");
@@ -24,4 +23,7 @@ app.use(express.json());
 app.use(router);
 app.use(errorHandler);
 
-module.exports = { app };
+app.listen(PORT, () => {
+  console.log(`Listening to port ${PORT}`);
+});
+// check lagi
