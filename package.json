@@ -7,12 +7,8 @@
     "node": "20.x"
   },
   "scripts": {
-    "dev": "node index.js",
     "start": "node index.js",
-    "test": "jest --runInBand --forceExit --detectOpenHandles",
-    "test2": "jest --runInBand --forceExit --detectOpenHandles --coverage",
-    "create": "sequelize db:migrate:undo:all && sequelize db:migrate && sequelize db:seed:all",
-    "all": "npm run create && npm run start"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
