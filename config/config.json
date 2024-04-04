@@ -1,18 +1,11 @@
 {
   "development": {
-    "username": "default",
-    "password": "aedLT14AhKYN",
-    "database": "fverceldb",
-    "host": "ep-old-sun-a4smwwt7.us-east-1.aws.neon.tech",
+    "username": "postgres",
+    "password": "postgres",
+    "database": "flip_and_boom",
+    "host": "localhost",
     "port": 5432,
-    "dialect": "postgres",
-    "ssl": true,
-    "dialectOptions": {
-      "ssl": {
-        "require": true,
-        "rejectUnauthorized": false
-      }
-    }
+    "dialect": "postgres"
   },
   "test": {
     "username": "postgres",

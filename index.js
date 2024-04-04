@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 const express = require("express");
 const PORT = 3001;
 const cors = require("cors");
@@ -11,10 +9,10 @@ const pool = new Pool({
   connectionString: process.env.POSTGRES_URL,
 });
 
-pool.connect((err) => {
-  if (err) throw er;
-  console.log("Connect to PostgreSql succesfully");
-});
+// pool.connect((err) => {
+//   if (err) throw err;
+//   console.log("Connect to PostgreSql succesfully");
+// });
 
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
